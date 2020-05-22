@@ -28,15 +28,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-
-    _getGifs().then((value) {
-      print(value);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -56,7 +47,6 @@ class _HomePageState extends State<HomePage> {
                   _search = text;
                 });
               },
-
               decoration: InputDecoration(
                   labelText: 'Pesquisar',
                   labelStyle: TextStyle(color: Colors.white),
