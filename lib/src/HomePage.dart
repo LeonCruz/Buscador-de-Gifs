@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:buscador_de_gifs/services/api.dart';
 import 'package:share/share.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 import 'GifDetail.dart';
 
@@ -93,8 +94,7 @@ class _HomePageState extends State<HomePage> {
   int get_count(List data) {
     if (_search == null || _search.isEmpty) {
       return data.length;
-    }
-    else {
+    } else {
       return data.length + 1;
     }
   }
@@ -109,28 +109,41 @@ class _HomePageState extends State<HomePage> {
         ),
         itemCount: get_count(snapshot.data['data']),
         itemBuilder: (context, index) {
-          if (_search == null || _search.isEmpty || index < snapshot.data['data'].length) {
-              return GestureDetector(
-              child: Image.network(
-                snapshot.data['data'][index]['images']['fixed_height']['url'],
-                height: 300.0,
-                fit: BoxFit.cover,
-              ),
+          if (_search == null ||
+              _search.isEmpty ||
+              index < snapshot.data['data'].length) {
+            return GestureDetector(
+              child: FadeInImage.memoryNetwork(
+                  placeholder: kTransparentImage,
+                  image: snapshot.data['data'][index]['images']['fixed_height']['url'],
+                  height: 300.0,
+                  fit: BoxFit.cover,
+                  ),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => GifDetail(snapshot.data['data'][index])));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            GifDetail(snapshot.data['data'][index])));
               },
               onLongPress: () {
-                Share.share(snapshot.data['data'][index]['images']['fixed_height']['url']);
+                Share.share(snapshot.data['data'][index]['images']
+                    ['fixed_height']['url']);
               },
             );
-          }
-          else {
+          } else {
             return Container(
               child: GestureDetector(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    CircleAvatar(child: Icon(Icons.arrow_downward, size: 30.0, color: Colors.white,),)
+                    CircleAvatar(
+                      child: Icon(
+                        Icons.arrow_downward,
+                        size: 30.0,
+                        color: Colors.white,
+                      ),
+                    )
                     // Icon(Icons.arrow_downward, size: 60.0, color: Colors.white,)
                   ],
                 ),
