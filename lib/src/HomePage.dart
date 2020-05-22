@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:buscador_de_gifs/services/api.dart';
+import 'package:share/share.dart';
 
 import 'GifDetail.dart';
 
@@ -117,6 +118,9 @@ class _HomePageState extends State<HomePage> {
               ),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => GifDetail(snapshot.data['data'][index])));
+              },
+              onLongPress: () {
+                Share.share(snapshot.data['data'][index]['images']['fixed_height']['url']);
               },
             );
           }
