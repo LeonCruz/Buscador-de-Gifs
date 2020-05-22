@@ -23,7 +23,9 @@ class GifDetail extends StatelessWidget {
       ),
       backgroundColor: Colors.black,
       body: Center(
-          child: Image.network(_gifData['images']['fixed_height']['url'])),
+          child: Hero(
+              tag: _gifData['id'],
+              child: Image.network(_gifData['images']['fixed_height']['url']))),
     );
   }
 }
