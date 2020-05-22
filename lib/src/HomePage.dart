@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
           'https://api.giphy.com/v1/gifs/trending?api_key=$api_key&limit=20&rating=G');
     } else {
       response = await http.get(
-          'https://api.giphy.com/v1/gifs/search?api_key=$api_key&q=$_search&limit=20&offset=$_offset&rating=G&lang=en');
+          'https://api.giphy.com/v1/gifs/search?api_key=$api_key&q=$_search&limit=19&offset=$_offset&rating=G&lang=en');
     }
 
     return json.decode(response.body);
@@ -45,6 +45,7 @@ class _HomePageState extends State<HomePage> {
               onSubmitted: (text) {
                 setState(() {
                   _search = text;
+                  _offset = 0;
                 });
               },
               decoration: InputDecoration(
@@ -87,6 +88,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  int get_count(List data) {
+    if (_search == null || _search.isEmpty) {
+      return data.length;
+    }
+    else {
+      return data.length + 1;
+    }
+  }
+
   Widget _createGifTable(BuildContext context, AsyncSnapshot snapshot) {
     return GridView.builder(
         padding: EdgeInsets.all(10.0),
@@ -95,15 +105,35 @@ class _HomePageState extends State<HomePage> {
           crossAxisSpacing: 10.0,
           mainAxisSpacing: 10.0,
         ),
-        itemCount: snapshot.data['data'].length,
+        itemCount: get_count(snapshot.data['data']),
         itemBuilder: (context, index) {
-          return GestureDetector(
-            child: Image.network(
-              snapshot.data['data'][index]['images']['fixed_height']['url'],
-              height: 300.0,
-              fit: BoxFit.cover,
-            ),
-          );
+          if (_search == null || _search.isEmpty || index < snapshot.data['data'].length) {
+              return GestureDetector(
+              child: Image.network(
+                snapshot.data['data'][index]['images']['fixed_height']['url'],
+                height: 300.0,
+                fit: BoxFit.cover,
+              ),
+            );
+          }
+          else {
+            return Container(
+              child: GestureDetector(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    CircleAvatar(child: Icon(Icons.arrow_downward, size: 30.0, color: Colors.white,),)
+                    // Icon(Icons.arrow_downward, size: 60.0, color: Colors.white,)
+                  ],
+                ),
+                onTap: () {
+                  setState(() {
+                    _offset += 19;
+                  });
+                },
+              ),
+            );
+          }
         });
   }
 }
