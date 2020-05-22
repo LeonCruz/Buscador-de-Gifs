@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
   Future<Map> _getGifs() async {
     http.Response response;
 
-    if (_search == null) {
+    if (_search == null || _search.isEmpty) {
       response = await http.get(
           'https://api.giphy.com/v1/gifs/trending?api_key=$api_key&limit=20&rating=G');
     } else {
@@ -51,6 +51,12 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: EdgeInsets.all(10.0),
             child: TextField(
+              onSubmitted: (text) {
+                setState(() {
+                  _search = text;
+                });
+              },
+
               decoration: InputDecoration(
                   labelText: 'Pesquisar',
                   labelStyle: TextStyle(color: Colors.white),
