@@ -8,6 +8,10 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+          inputDecorationTheme: InputDecorationTheme(
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white)))),
       home: HomePage(),
     );
   }
